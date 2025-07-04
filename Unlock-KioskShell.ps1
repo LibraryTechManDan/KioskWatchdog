@@ -1,0 +1,19 @@
+# --- Elevate if not running as admin ---
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
+
+# --- Restore default Windows shell ---
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" `
+                 -Name "Shell" `
+                 -Value "explorer.exe"
+
+# --- Disable kiosk watchdog task ---
+Disable-ScheduledTask -TaskName "Kiosk Watchdog" -ErrorAction SilentlyContinue
+
+# --- Log and reboot ---
+Write-Output "[{0}] Kiosk shell unlocked. Explorer shell enabled. Watchdog disabled." -f (Get-Date)
+Start-Sleep -Seconds 3
+Restart-Computer -Force
