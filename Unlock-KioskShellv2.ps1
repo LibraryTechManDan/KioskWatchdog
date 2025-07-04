@@ -13,7 +13,6 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlo
 # Disable and remove watchdog task
 if (Get-ScheduledTask -TaskName "Kiosk Watchdog" -ErrorAction SilentlyContinue) {
     Disable-ScheduledTask -TaskName "Kiosk Watchdog" -ErrorAction SilentlyContinue
-    Unregister-ScheduledTask -TaskName "Kiosk Watchdog" -Confirm:$false -ErrorAction SilentlyContinue
     Write-Output "Kiosk Watchdog task disabled and removed."
 }
 
