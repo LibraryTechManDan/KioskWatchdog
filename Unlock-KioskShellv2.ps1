@@ -10,13 +10,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlo
                  -Name "Shell" `
                  -Value "explorer.exe"
 
-# Disable and remove watchdog task
-if (Get-ScheduledTask -TaskName "Kiosk Watchdog" -ErrorAction SilentlyContinue) {
-    Disable-ScheduledTask -TaskName "Kiosk Watchdog" -ErrorAction SilentlyContinue
-    Write-Output "Kiosk Watchdog task disabled and removed."
-}
-
 # Log and reboot
-Write-Output "[{0}] Kiosk shell unlocked. Explorer shell enabled. Watchdog removed." -f (Get-Date)
+Write-Output "[{0}] Kiosk shell unlocked. Explorer shell enabled." -f (Get-Date)
 Start-Sleep -Seconds 3
 Restart-Computer -Force
